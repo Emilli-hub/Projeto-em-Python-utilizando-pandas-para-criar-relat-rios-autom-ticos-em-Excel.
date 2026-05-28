@@ -1,0 +1,22 @@
+import pandas as pd
+import sqlite3
+banco = sqlite3.connect("empresa.db")
+cursor = banco.cursor()
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS funcionarios (   
+               id INTEGER,
+               nome TEXT,
+               salario INTEGER
+)
+""")
+cursor.execute("INSERT INTO funcionarios VALUES(1,'Ana', 2000)")
+cursor.execute("INSERT INTO funcionarios VALUES(2,'João', 3000)")
+cursor.execute("INSERT INTO funcionarios VALUES(3,'Maria', 4000)")
+banco.commit()
+cursor.execute("SELECT * FROM funcionarios")
+dados = cursor.fetchall()
+tabela = pd.DataFrame(dados,columns=["ID", "NOME", "SALARIO"])
+print(tabela)
+tabela.to_excel("funcionario.xlsx", index=False)
+print("Excel criado com sucesso!")
+banco.close()
